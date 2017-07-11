@@ -439,7 +439,7 @@ namespace MuteFm.SmartVolManagerPackage
                     {
                         AutoMuted = true;
                         UiPackage.UiCommands.SetNotification("Music fading out...", true);
-                        UiPackage.UiCommands.TrackEvent("automute");
+//                        UiPackage.UiCommands.TrackEvent("automute");
                         PerformOperation(Operation.SmartMute);
                     }
                     else if ((MusicState != BgMusicState.Play) && (nonBgMusicHeard == false))

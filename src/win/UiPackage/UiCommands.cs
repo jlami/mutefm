@@ -36,59 +36,9 @@ namespace MuteFm.UiPackage
 
         public static bool TrayLoaded = false;
 
-        private static System.Windows.Forms.WebBrowser _browserControl = null;
 
         private static string _uri = "";
 
-        public static void TrackEvent(string msg)
-        {
-            // Unfortunate that this uses UI thread (moving it to background worker isn't as useful; perhaps undo that)
-            System.ComponentModel.BackgroundWorker trackEventWorker = new BackgroundWorker();
-            trackEventWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(delegate
-            {
-                MuteFm.UiPackage.WinSoundServerSysTray.Instance.Invoke((System.Windows.Forms.MethodInvoker)delegate
-                {
-                    try
-                    {
-                        _uri = "http://www.mutefm.com/track_" + msg.ToLower() + ".html?identity=" + Program.Identity;
-
-                        _browserControl = new System.Windows.Forms.WebBrowser();
-                        _browserControl.ScriptErrorsSuppressed = true;
-                        _browserControl.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(browser_DocumentCompleted);
-                        _browserControl.Url = new Uri(_uri);
-
-                        // TODO: use ie for this at least for now
-                        /* 
-                        _trackSession = Awesomium.Core.WebCore.CreateWebSession(new Awesomium.Core.WebPreferences());
-                        _webView = Awesomium.Core.WebCore.CreateWebView(100, 100, _trackSession, Awesomium.Core.WebViewType.Offscreen);
-                        _webView.DocumentReady += new Awesomium.Core.UrlEventHandler(webView_DocumentReady);
-                        _webView.Source = new Uri(_uri); */
-                    }
-                    catch (Exception ex)
-                    {
-                        MuteFm.SmartVolManagerPackage.SoundEventLogger.LogException(ex);
-                    }
-                });
-            });
-            trackEventWorker.RunWorkerAsync(); 
-        }
-
-        static void browser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-            try
-            {
-                System.Threading.Thread.Sleep(500);
-                if (_browserControl != null)
-                {
-                    _browserControl.Stop();
-                    _browserControl.Dispose();
-                }
-            }
-            catch (Exception ex)
-            {
-                MuteFm.SmartVolManagerPackage.SoundEventLogger.LogException(ex);
-            }
-        }
 /*
         static void webView_DocumentReady(object sender, Awesomium.Core.UrlEventArgs e)
         {
@@ -557,7 +507,6 @@ namespace MuteFm.UiPackage
                         case Operation.Play:
                             SmartVolManagerPackage.BgMusicManager.AutoMuted = false; // TODO
                             MuteFm.SmartVolManagerPackage.BgMusicManager.UserWantsBgMusic = true;
-                            if (track) TrackEvent("Play");
                             break;
 
                         case Operation.ChangeMusic:

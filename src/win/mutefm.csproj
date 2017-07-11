@@ -124,7 +124,6 @@
     <Compile Include="..\shared\SmartVolManagerPackage\BgMusicManager.cs" />
     <Compile Include="..\shared\SmartVolManagerPackage\SoundEventLogger.cs" />
     <Compile Include="..\shared\SmartVolManagerPackage\SoundServer.cs" />
-    <Compile Include="CheckForUpdates.cs" />
     <Compile Include="GrowlInstallHelper.cs" />
     <Compile Include="obj\Resources\Resource.Designer.cs" />
     <Compile Include="Resource1.Designer.cs" />
@@ -250,7 +249,7 @@
   <ItemGroup>
     <Content Include="favicon.ico" />
     <Content Include="locales\en-US.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\favicon.ico.bmp" />
     <None Include="Resources\favicon.ico" />

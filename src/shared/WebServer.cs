@@ -82,17 +82,6 @@ namespace MuteFm
             return contents;
         }
 
-        private static HttpListener _listener = null;
-/*        public static void Init()
-        {
-            _listener = new System.Net.HttpListener();
-            _listener.Prefixes.Add("http://127.0.0.1:1234/");
-            _listener.Start();
-
-            Process();
-        }*/
-
-
         #region // From http://www.west-wind.com/weblog/posts/2009/Feb/05/Html-and-Uri-String-Encoding-without-SystemWeb
         /// <summary>
         /// UrlEncodes a string without the requirement for System.Web
@@ -231,73 +220,6 @@ namespace MuteFm
             }
 
             return bitmap;
-        }
-
-        private static void Process()
-        {
-            while (true)
-            {
-                try
-                {
-                    HttpListenerContext context = _listener.GetContext();
-                    byte[] output;
-
-                    /*
-                    //TODO: shouldn't allow just having a URL like this since people could create pages that mess with your background music.  Need to add auth.
-                    //TODO: Have commands run in separate thread; make player look nicer (i.e. use icons)
-                    if (context.Request.Url.AbsolutePath.StartsWith("/Open"))
-                    {
-                        string url = GetUrlEncodedKey(context.Request.RawUrl, "url");
-                        UiPackage.UiCommands.ShowSite(url);
-                    }*/
-
-                    string str = GetInternalPlayerHtml(); // default output; should be internalplayer
-                    output = Encoding.ASCII.GetBytes(str);
-
-                    switch (GetBaseUrl(context.Request.Url.AbsolutePath))
-                    {
-                        case "/":
-                            break;
-                        default:
-                            // TODO: test this for security
-                            string filePath = GetBaseUrl(context.Request.Url.AbsolutePath);
-                            filePath = filePath.Replace("/", "\\");
-                            if (filePath.StartsWith("\\"))
-                                filePath = filePath.Substring(1);
-                            output = RetrieveFile(filePath);
-                            if ((output == null) || (output.Length == 0))
-                            {
-                                context.Response.StatusCode = 404;
-                                output = GetBytes("404 - File not found");
-                            }
-                            break;
-                    }
-//                    context.Response.ContentEncoding = Encoding.UTF8;
-                    context.Response.ContentLength64 = output.Length;
-                    context.Response.OutputStream.Write(output, 0, output.Length);
-                    context.Response.OutputStream.Flush();
-                    context.Response.OutputStream.Close();
-                }
-                catch (Exception ex)
-                {
-                    MuteFm.SmartVolManagerPackage.SoundEventLogger.LogException(ex);
-                }
-            }
-
-            /*
-            System.Net.HttpListenerContext context = _listener.GetContext();
-            System.Net.HttpListenerRequest request = context.Request;
-            // Obtain a response object.
-            System.Net.HttpListenerResponse response = context.Response;
-            // Construct a response.
-            string responseString = "<HTML><BODY> Hello world!</BODY></HTML>";
-            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
-            // Get a response stream and write the response to it.
-            response.ContentLength64 = buffer.Length;
-            System.IO.Stream output = response.OutputStream;
-            output.Write(buffer, 0, buffer.Length);
-            // You must close the output stream.
-            output.Close();*/
         }
 
         static byte[] GetBytes(string str)

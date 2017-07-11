@@ -332,9 +332,9 @@ namespace MuteFm
                         x = x + 1;
                     string path = bgm.IconPath != "" ? bgm.IconPath : bgm.UrlOrCommandLine;
                     if ((bgm.IconPath == "") && (bgm.UrlOrCommandLine.StartsWith("http://")))
-                        path = @"http://getfavicon.appspot.com/" + path;
+                        path = @"http://ucygetfavicon.appspot.com/" + path;
                     if ((bgm.IconPath == "") && (bgm.UrlOrCommandLine.StartsWith("https://")))
-                        path = @"https://getfavicon.appspot.com/" + path;
+                        path = @"https://ucygetfavicon.appspot.com/" + path;
 
                     if (_iconContents.TryGetValue(path, out bitmap) == false)
                     {

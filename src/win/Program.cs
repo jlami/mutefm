@@ -209,9 +209,9 @@ namespace MuteFm
                 //WebSocketServerThread.Name = "WebSocketServer";
                 //WebSocketServerThread.Start();
 
-                DoPeriodicTasksThread = new Thread(new ThreadStart(DoPeriodicTasks));
-                DoPeriodicTasksThread.Name = "DoPeriodicTasks";
-                DoPeriodicTasksThread.Start();
+//                DoPeriodicTasksThread = new Thread(new ThreadStart(DoPeriodicTasks));
+//                DoPeriodicTasksThread.Name = "DoPeriodicTasks";
+//                DoPeriodicTasksThread.Start();
 
                 //jarednow CheckItunesThread = new Thread(new ThreadStart(MuteApp.ITunesPlayer.CheckITunes));
                 //jarednow CheckItunesThread.Name = "CheckITunes";
@@ -246,125 +246,6 @@ namespace MuteFm
         }
 
         // Every four hours, we check the licensing and if a new version is available
-
-        private static void CheckLicensing(bool firstTime)
-        {
-            DateTime LicenseEnd = new DateTime(MuteFm.Constants.ExpireYear, MuteFm.Constants.ExpireMonth, MuteFm.Constants.ExpireDay, 23, 59, 59, 0, DateTimeKind.Local);
-
-            if (System.DateTime.Now > LicenseEnd)
-            {
-                //LicenseExpired = true;
-                //MessageBox.Show("This version of mute.fm is beta software and has expired.  Thanks for demoing!  Get a new version at http://www.mutefm.com/.");
-                //MuteFm.UiPackage.UiCommands.UnregisterHotkeys();
-                //Application.Exit();
-            }
-
-            if (firstTime)
-            {
-                System.Threading.Thread.Sleep(30000); // Sleep thirty seconds the first time.  UI should be loaded so that we can track the install.
-
-                firstTime = false;
-
-                if (Program.Installed == false)
-                {
-                    MuteFm.UiPackage.UiCommands.TrackEvent("install");
-                    Program.Installed = true;
-                }
-            }
-        }
-
-        // Checks licensing, updates, Growl integration, and clears out old entries from the image cache
-        public static void DoPeriodicTasks()
-        {
-            bool updateFound = false;
-            bool firstTime = true;
-            TimeSpan timeSpan = new TimeSpan(4, 0, 0);
-            DateTime prevTime = DateTime.MinValue;
-            DateTime prevDay = DateTime.MinValue;
-            while (true)
-            {
-                try
-                {
-                    CheckLicensing(firstTime);
-                    firstTime = false;
-                }
-                catch (Exception ex)
-                {
-                    MuteFm.SmartVolManagerPackage.SoundEventLogger.LogException(ex);
-                }
-
-                try
-                {
-                    if ((SmartVolManagerPackage.BgMusicManager.MuteFmConfig.GeneralSettings.NotifyAboutUpdates == true) && !updateFound && CheckForUpdates.Check())
-                    {
-                        updateFound = true;
-                        CheckForUpdates.Update();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MuteFm.SmartVolManagerPackage.SoundEventLogger.LogException(ex);
-                }
-
-                try
-                {
-                    CheckGrowl();
-                }
-                catch (Exception ex)
-                {
-                    MuteFm.SmartVolManagerPackage.SoundEventLogger.LogException(ex);
-                }
-
-                /*
-                try
-                {
-                    // TODO: checkflash (add new code here)
-                }
-                catch (Exception ex)
-                {
-                    MuteFm.SmartVolManagerPackage.SoundEventLogger.LogException(ex);
-                }
-                */
-
-                // Reset unused entries in image cache occasionally
-                try
-                {
-                    WebServer.ClearOldEntries(prevTime);
-                    prevTime = DateTime.Now;
-                }
-                catch (Exception ex)
-                {
-                    MuteFm.SmartVolManagerPackage.SoundEventLogger.LogException(ex);
-                }
-
-                try
-                {
-                    if (prevDay == DateTime.MinValue)
-                    {
-                        System.Threading.Thread.Sleep(60 * 1000);
-                    }
-                    if (DateTime.Now.Date != prevDay)
-                    {
-                        prevDay = DateTime.Now.Date;
-                        MuteFm.UiPackage.UiCommands.TrackEvent("Running");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MuteFm.SmartVolManagerPackage.SoundEventLogger.LogException(ex);
-                }
-
-                System.Threading.Thread.Sleep(timeSpan);
-            }
-        }
-
-        public static void CheckGrowl()
-        {
-            if (GrowlInstallHelper.GrowlInstallHelper.GetForceGrowl() == true)
-            {
-                GrowlInstallHelper.GrowlInstallHelper.CheckAndRun();
-            }
-        }
 
         public static void InitExtensions()
         {

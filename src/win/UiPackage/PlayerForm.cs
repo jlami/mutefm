@@ -302,13 +302,13 @@ namespace MuteFm.UiPackage
             UiCommands.ShowGettingStartedWizard();
 #endif
         }
-        private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (CheckForUpdates.Check())
-                CheckForUpdates.Update();
-            else
-                MessageBox.Show(this, "No updates found", Constants.ProgramName);
-        }
+//        private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
+//        {
+//            if (CheckForUpdates.Check())
+//                CheckForUpdates.Update();
+//            else
+//                MessageBox.Show(this, "No updates found", Constants.ProgramName);
+//        }
         private void mResetSettingsMenuItem_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show(this, "Are you sure you want to reset mute.fm settings (both preferences and sound information) to the factory default?", Constants.ProgramName, MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)

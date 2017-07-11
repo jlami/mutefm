@@ -9,7 +9,6 @@ namespace MuteFm
 {
     public class Constants
     {
-        public static string PatcherRoot = "http://www.mutetab.com/patcher";
 #if NOAWE
         public static string ProgramName = "mute.fm";
 #else
